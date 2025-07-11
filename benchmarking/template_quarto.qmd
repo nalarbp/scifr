@@ -1,0 +1,439 @@
+---
+title: "Quarto-R (Basic complexity - R1). "
+format:
+  html:
+    page-layout: full
+    html-math-method: katex
+    code-tools: true
+    self-contained: true
+    embed-resources: true
+execute:
+  warning: false
+params:
+  dataset: "16K"
+---
+
+```{r}
+#| echo: false
+#| message: false
+library(jsonlite)
+
+dataset_size <- ifelse(exists("params") && !is.null(params$dataset), 
+                      params$dataset, "16K")
+
+base_path <- "/Users/uqbperma/SynologyDrive/Fordelab_works_NAS/00_SCIFR/benchmarking/run_automated_benchmark/test_datasets/"
+file_path <- file.path(base_path, paste0("covid_country_", dataset_size, ".flat.json"))
+
+#check if file exists
+if(!file.exists(file_path)) {
+  stop(paste("File not found:", file_path))
+}
+
+#read pre-made flat json directly using proper JSON reading
+flat_data_obj <- jsonlite::fromJSON(file_path)
+
+#validate json structure
+if(is.null(flat_data_obj$data)) {
+  stop("Invalid flat JSON structure: missing 'data' field")
+}
+
+#convert back to JSON string for JavaScript injection
+flat_data_string <- jsonlite::toJSON(flat_data_obj, auto_unbox = TRUE)
+
+#extract countries from flat data for initial selection
+extract_countries_from_flat <- function(flat_data_obj) {
+  data_rows <- strsplit(flat_data_obj$data, "\n")[[1]]
+  
+  if(length(data_rows) < 2) return(c())
+  
+  #detect separator from your example (semicolon, not tab)
+  first_row <- data_rows[1]
+  separator <- if(grepl(";", first_row)) ";" else "\t"
+  
+  #get header to find country column index
+  header <- strsplit(data_rows[1], separator)[[1]]
+  country_col_idx <- which(header == "country")
+  
+  if(length(country_col_idx) == 0) return(c())
+  
+  #extract unique countries from data rows
+  countries <- c()
+  for(i in 2:length(data_rows)) {
+    row_values <- strsplit(data_rows[i], separator)[[1]]
+    if(length(row_values) >= country_col_idx) {
+      countries <- c(countries, row_values[country_col_idx])
+    }
+  }
+  
+  unique_countries <- sort(unique(countries))
+  if("World" %in% unique_countries) {
+    unique_countries <- c("World", unique_countries[unique_countries != "World"])
+  }
+  
+  return(unique_countries)
+}
+
+#get countries for selector
+countries <- extract_countries_from_flat(flat_data_obj)
+```
+
+```{=html}
+<div class="max-w-7xl mx-auto p-2 space-y-6">
+    <!-- Country Metric Selector -->
+    <div class="border border-gray-200 rounded-lg p-2 bg-white">
+        <div id="countryMetricSelector"></div>
+    </div>
+    
+    <!-- Chart -->
+    <div class="border border-gray-200 rounded-lg p-2 bg-white min-h-[450px]">
+        <div id="chartLoading" class="flex items-center justify-center h-96">
+            <div class="text-gray-500">Loading chart...</div>
+        </div>
+        <div class="chart-container" style="height: 400px;">
+            <canvas id="lineChart" style="display: none;"></canvas>
+        </div>
+    </div>
+    
+    <!-- Table -->
+    <div class="border border-gray-200 rounded-lg p-2 bg-white min-h-[750px]">
+        <div id="tableLoading" class="flex items-center justify-center h-96">
+            <div class="text-gray-500">Loading table...</div>
+        </div>
+        <div id="tableContainer" style="display: none;">
+            <table id="dataTable" class="display" style="width:100%"></table>
+        </div>
+    </div>
+</div>
+
+<!-- Use local references instead of CDN-->
+<link href="/Users/uqbperma/SynologyDrive/Fordelab_works_NAS/00_SCIFR/benchmarking/run_automated_benchmark/libraries/datatables-2.3.1.min.css" rel="stylesheet">
+<script src="/Users/uqbperma/SynologyDrive/Fordelab_works_NAS/00_SCIFR/benchmarking/run_automated_benchmark/libraries/jquery-3.7.1.min.js"></script>
+<script src="/Users/uqbperma/SynologyDrive/Fordelab_works_NAS/00_SCIFR/benchmarking/run_automated_benchmark/libraries/chartjs-4.4.1.min.js"></script>
+<script src="/Users/uqbperma/SynologyDrive/Fordelab_works_NAS/00_SCIFR/benchmarking/run_automated_benchmark/libraries/datatables-2.3.1.min.js"></script>
+<script src="/Users/uqbperma/SynologyDrive/Fordelab_works_NAS/00_SCIFR/benchmarking/run_automated_benchmark/libraries/tailwind-4.1.8.min.js"></script>
+
+<script>
+//global state
+let parsedData = [];
+let selectedCountry = 'World';
+let selectedMetric = 'new_cases_per_million_7_day_avg_right';
+let availableCountries = [];
+let availableMetrics = [];
+let chartInstance = null;
+let tableInstance = null;
+
+//parse flat JSON data - using explicit ;n and ;t separators
+function parseData(dataInput) {
+    let actualData;
+    
+    //handle if data is already an object
+    if (typeof dataInput === 'object' && dataInput !== null) {
+        if (dataInput.data) {
+            actualData = dataInput.data;
+        } else {
+            throw new Error('Data object missing "data" property');
+        }
+    } else if (typeof dataInput === 'string') {
+        try {
+            const jsonData = JSON.parse(dataInput);
+            actualData = jsonData.data;
+        } catch (error) {
+            throw new Error('Invalid JSON format: ' + error.message);
+        }
+    } else {
+        throw new Error('dataInput must be a non-empty string or object');
+    }
+    
+    if (!actualData || typeof actualData !== 'string') {
+        throw new Error('JSON data property must be a non-empty string');
+    }
+    
+    //use explicit separators: ;n for rows, ;t for columns
+    const rowSeparator = ';n';
+    const colSeparator = ';t';
+    const validRows = actualData.split(rowSeparator);
+    //const validRows = rows.filter(row => row.trim().length > 0);
+    
+    if (validRows.length < 2) {
+        throw new Error('data must contain at least header and one data row. Found ' + validRows.length + ' valid rows');
+    }
+    
+    const header = validRows[0].split(colSeparator).map(col => col.trim());
+    const parsedData = new Array(validRows.length - 1);
+    
+    for (let i = 1; i < validRows.length; i++) {
+        const values = validRows[i].split(colSeparator);
+        const rowObj = {};
+        
+        for (let j = 0; j < header.length; j++) {
+            const rawValue = values[j]?.trim() || '';
+            if (rawValue === '') {
+                rowObj[header[j]] = null;
+            } else {
+                const numValue = +rawValue;
+                rowObj[header[j]] = (numValue === numValue && isFinite(numValue)) ? numValue : rawValue;
+            }
+        }
+        parsedData[i - 1] = rowObj;
+    }
+    
+    return parsedData;
+}
+
+//format metric names for display
+function formatMetricName(metric) {
+    return metric
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, l => l.toUpperCase())
+        .replace(/7 Day/g, '(7-day)')
+        .replace(/Per Million/g, 'per Million');
+}
+
+//generate chart data
+function generateChartData(data, country, metric) {
+    let filteredData = data.filter(row => row.country === country);
+    let chartData = filteredData
+        .filter(row => row[metric] !== null && row[metric] !== undefined)
+        .map(row => ({
+            x: row.date,
+            y: row[metric]
+        }))
+        .sort((a, b) => new Date(a.x) - new Date(b.x));
+    return chartData;
+}
+
+//generate table data
+function generateTableData(data, country) {
+    const filteredData = data.filter(row => row.country === country);
+    const columns = Object.keys(data[0] || {}).map(key => ({
+        data: key,
+        title: formatMetricName(key)
+    }));
+    
+    return { data: filteredData, columns };
+}
+
+//render country metric selector
+function renderCountryMetricSelector() {
+    const container = document.getElementById('countryMetricSelector');
+    
+    container.innerHTML = `
+        <div class="flex flex-col space-y-2">
+            <div class="flex flex-row gap-2 items-start">
+                <!-- Total data points -->
+                <div class="form-control">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Total data points</label>
+                    <p class="text-center font-bold p-2 text-lg">${parsedData.length}</p>
+                </div>
+                
+                <!-- Country Selector -->
+                <div class="form-control">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                    <select id="countrySelect" class="border border-gray-300 rounded p-2 text-sm">
+                        ${availableCountries.map(country => 
+                            `<option value="${country}" ${country === selectedCountry ? 'selected' : ''}>${country}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+                
+                <!-- Metric Selector -->
+                <div class="form-control">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Metric</label>
+                    <select id="metricSelect" class="border border-gray-300 rounded p-2 text-sm">
+                        ${availableMetrics.map(metric => 
+                            `<option value="${metric}" ${metric === selectedMetric ? 'selected' : ''}>${formatMetricName(metric)}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+                
+                <!-- Reset Button -->
+                <div class="pt-6">
+                    <button id="resetBtn" class="btn btn-sm btn-info rounded-xl">
+                        Reset
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Info -->
+            <div class="text-sm text-gray-600">
+                Showing chart and table of <span class="font-medium">${formatMetricName(selectedMetric)}</span> for <span class="font-medium">${selectedCountry}</span>
+            </div>
+        </div>
+    `;
+    
+    //bind events
+    document.getElementById('countrySelect').addEventListener('change', (e) => {
+        selectedCountry = e.target.value;
+        updateComponents();
+    });
+    
+    document.getElementById('metricSelect').addEventListener('change', (e) => {
+        selectedMetric = e.target.value;
+        updateComponents();
+    });
+    
+    document.getElementById('resetBtn').addEventListener('click', () => {
+        selectedCountry = availableCountries.includes('World') ? 'World' : availableCountries[0];
+        selectedMetric = 'new_cases_per_million_7_day_avg_right';
+        updateComponents();
+    });
+}
+
+//render chart
+function renderChart() {
+    document.getElementById('chartLoading').style.display = 'flex';
+    document.getElementById('lineChart').style.display = 'none';
+    
+    setTimeout(() => {
+        const chartData = generateChartData(parsedData, selectedCountry, selectedMetric);
+        const canvas = document.getElementById('lineChart');
+        const ctx = canvas.getContext('2d');
+        
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+        
+        const metricColor = selectedMetric.includes('cases') ? '#ff6b6b' : '#6b5fff';
+        
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: formatMetricName(selectedMetric),
+                    data: chartData,
+                    borderColor: metricColor,
+                    backgroundColor: metricColor + '20',
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 0,
+                    pointHoverRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        type: 'category',
+                        title: { display: true, text: 'Date' },
+                        ticks: { maxTicksLimit: 15 }
+                    },
+                    y: {
+                        type: 'linear',
+                        beginAtZero: true,
+                        title: { display: true, text: formatMetricName(selectedMetric) }
+                    }
+                }
+            }
+        });
+        
+        document.getElementById('chartLoading').style.display = 'none';
+        document.getElementById('lineChart').style.display = 'block';
+    }, 100);
+}
+
+//render table
+function renderTable() {
+    document.getElementById('tableLoading').style.display = 'flex';
+    document.getElementById('tableContainer').style.display = 'none';
+    
+    setTimeout(() => {
+        const tableData = generateTableData(parsedData, selectedCountry);
+        
+        if (tableInstance) {
+            tableInstance.destroy();
+        }
+        
+        tableInstance = $('#dataTable').DataTable({
+            data: tableData.data,
+            columns: tableData.columns.map(col => ({
+                ...col,
+                render: function(data, type, row) {
+                    if (typeof data === 'number') {
+                        return data !== null && data !== undefined ? parseFloat(data).toFixed(2) : 'N/A';
+                    }
+                    return data || 'N/A';
+                }
+            })),
+            pageLength: 15,
+            searching: true,
+            ordering: true,
+            responsive: true,
+            destroy: true
+        });
+        
+        document.getElementById('tableLoading').style.display = 'none';
+        document.getElementById('tableContainer').style.display = 'block';
+    }, 100);
+}
+
+//update components when selections change
+function updateComponents() {
+    renderCountryMetricSelector();
+    renderChart();
+    renderTable();
+}
+
+//initialise app
+function init() {
+    try {
+        //get raw data from R (already flat JSON string)
+        const rawDataString = window.flatDataFromR;
+        
+        //parse data
+        parsedData = parseData(rawDataString);
+        
+        //extract available options
+        availableCountries = [...new Set(parsedData.map(row => row.country))].sort();
+        if (availableCountries.includes('World')) {
+            availableCountries = ['World', ...availableCountries.filter(c => c !== 'World')];
+        }
+        
+        availableMetrics = Object.keys(parsedData[0] || {}).filter(key => 
+            typeof parsedData[0][key] === 'number'
+        );
+        
+        //set initial selection
+        selectedCountry = availableCountries.includes('World') ? 'World' : availableCountries[0];
+        
+        //render components
+        updateComponents();
+        
+    } catch (error) {
+        console.error('Initialisation failed:', error);
+        document.body.innerHTML = `
+            <div class="max-w-7xl mx-auto p-6">
+                <h1 class="text-3xl font-bold text-red-600">Error</h1>
+                <p class="text-red-500">${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+//inject data from R and start when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    //data injection will happen below
+    init();
+});
+</script>
+```
+
+```{r}
+#| echo: false
+#| results: asis
+
+#inject the flat data string directly into JavaScript
+cat('<script>')
+cat('//inject flat data from R\n')
+cat('window.flatDataFromR = ')
+cat(flat_data_string)
+cat(';\n')
+cat('//reinitialise if data is ready\n')
+cat('if (typeof init === "function") {\n')
+cat('  init();\n')
+cat('}\n')
+cat('</script>')
+```

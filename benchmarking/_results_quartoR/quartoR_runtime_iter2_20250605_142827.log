@@ -1,0 +1,413 @@
+quartoR benchmarking iteration 2 started at Thu  5 Jun 2025 14:28:27 AEST
+Runtime data: _results_quartoR/quartoR_runtime_iter2_20250605_142827.csv
+Processing 100 dataset with quartoR...
+[31m
+
+processing file: template_quarto.qmd
+[39m1/4                  
+2/4 [unnamed-chunk-1]
+3/4                  
+4/4 [unnamed-chunk-2]
+[31moutput file: template_quarto.knit.md
+
+[39m[1mpandoc -o temp_quartoR_iter_2.html[22m
+  to: html
+  standalone: true
+  embed-resources: true
+  self-contained: true
+  section-divs: true
+  html-math-method: katex
+  wrap: none
+  default-image-extension: png
+  variables: {}
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Quarto-R (Basic complexity - R1). '
+  page-layout: full
+  
+[33mWARNING (/Users/uqbperma/miniforge3/envs/quarto-jinja-scifr-benchmarking-env/share/quarto/filters/main.lua:9521) Unable to parse table from raw html block: skipping.
+[39mOutput created: temp_quartoR_iter_2.html
+
+SUCCESS: _results_quartoR/quartoR_report_iter2_100.html (1922159B, real:5.53000s)
+
+Processing 500 dataset with quartoR...
+[31m
+
+processing file: template_quarto.qmd
+[39m1/4                  
+2/4 [unnamed-chunk-1]
+3/4                  
+4/4 [unnamed-chunk-2]
+[31moutput file: template_quarto.knit.md
+
+[39m[1mpandoc -o temp_quartoR_iter_2.html[22m
+  to: html
+  standalone: true
+  embed-resources: true
+  self-contained: true
+  section-divs: true
+  html-math-method: katex
+  wrap: none
+  default-image-extension: png
+  variables: {}
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Quarto-R (Basic complexity - R1). '
+  page-layout: full
+  
+[33mWARNING (/Users/uqbperma/miniforge3/envs/quarto-jinja-scifr-benchmarking-env/share/quarto/filters/main.lua:9521) Unable to parse table from raw html block: skipping.
+[39mOutput created: temp_quartoR_iter_2.html
+
+SUCCESS: _results_quartoR/quartoR_report_iter2_500.html (1945176B, real:5.54000s)
+
+Processing 1K dataset with quartoR...
+[31m
+
+processing file: template_quarto.qmd
+[39m1/4                  
+2/4 [unnamed-chunk-1]
+3/4                  
+4/4 [unnamed-chunk-2]
+[31moutput file: template_quarto.knit.md
+
+[39m[1mpandoc -o temp_quartoR_iter_2.html[22m
+  to: html
+  standalone: true
+  embed-resources: true
+  self-contained: true
+  section-divs: true
+  html-math-method: katex
+  wrap: none
+  default-image-extension: png
+  variables: {}
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Quarto-R (Basic complexity - R1). '
+  page-layout: full
+  
+[33mWARNING (/Users/uqbperma/miniforge3/envs/quarto-jinja-scifr-benchmarking-env/share/quarto/filters/main.lua:9521) Unable to parse table from raw html block: skipping.
+[39mOutput created: temp_quartoR_iter_2.html
+
+SUCCESS: _results_quartoR/quartoR_report_iter2_1K.html (1971090B, real:5.49000s)
+
+Processing 2K dataset with quartoR...
+[31m
+
+processing file: template_quarto.qmd
+[39m1/4                  
+2/4 [unnamed-chunk-1]
+3/4                  
+4/4 [unnamed-chunk-2]
+[31moutput file: template_quarto.knit.md
+
+[39m[1mpandoc -o temp_quartoR_iter_2.html[22m
+  to: html
+  standalone: true
+  embed-resources: true
+  self-contained: true
+  section-divs: true
+  html-math-method: katex
+  wrap: none
+  default-image-extension: png
+  variables: {}
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Quarto-R (Basic complexity - R1). '
+  page-layout: full
+  
+[33mWARNING (/Users/uqbperma/miniforge3/envs/quarto-jinja-scifr-benchmarking-env/share/quarto/filters/main.lua:9521) Unable to parse table from raw html block: skipping.
+[39mOutput created: temp_quartoR_iter_2.html
+
+SUCCESS: _results_quartoR/quartoR_report_iter2_2K.html (2022925B, real:5.58000s)
+
+Processing 4K dataset with quartoR...
+[31m
+
+processing file: template_quarto.qmd
+[39m1/4                  
+2/4 [unnamed-chunk-1]
+3/4                  
+4/4 [unnamed-chunk-2]
+[31moutput file: template_quarto.knit.md
+
+[39m[1mpandoc -o temp_quartoR_iter_2.html[22m
+  to: html
+  standalone: true
+  embed-resources: true
+  self-contained: true
+  section-divs: true
+  html-math-method: katex
+  wrap: none
+  default-image-extension: png
+  variables: {}
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Quarto-R (Basic complexity - R1). '
+  page-layout: full
+  
+[33mWARNING (/Users/uqbperma/miniforge3/envs/quarto-jinja-scifr-benchmarking-env/share/quarto/filters/main.lua:9521) Unable to parse table from raw html block: skipping.
+[39mOutput created: temp_quartoR_iter_2.html
+
+SUCCESS: _results_quartoR/quartoR_report_iter2_4K.html (2126596B, real:5.59000s)
+
+Processing 8K dataset with quartoR...
+[31m
+
+processing file: template_quarto.qmd
+[39m1/4                  
+2/4 [unnamed-chunk-1]
+3/4                  
+4/4 [unnamed-chunk-2]
+[31moutput file: template_quarto.knit.md
+
+[39m[1mpandoc -o temp_quartoR_iter_2.html[22m
+  to: html
+  standalone: true
+  embed-resources: true
+  self-contained: true
+  section-divs: true
+  html-math-method: katex
+  wrap: none
+  default-image-extension: png
+  variables: {}
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Quarto-R (Basic complexity - R1). '
+  page-layout: full
+  
+[33mWARNING (/Users/uqbperma/miniforge3/envs/quarto-jinja-scifr-benchmarking-env/share/quarto/filters/main.lua:9521) Unable to parse table from raw html block: skipping.
+[39mOutput created: temp_quartoR_iter_2.html
+
+SUCCESS: _results_quartoR/quartoR_report_iter2_8K.html (2333967B, real:5.85000s)
+
+Processing 16K dataset with quartoR...
+[31m
+
+processing file: template_quarto.qmd
+[39m1/4                  
+2/4 [unnamed-chunk-1]
+3/4                  
+4/4 [unnamed-chunk-2]
+[31moutput file: template_quarto.knit.md
+
+[39m[1mpandoc -o temp_quartoR_iter_2.html[22m
+  to: html
+  standalone: true
+  embed-resources: true
+  self-contained: true
+  section-divs: true
+  html-math-method: katex
+  wrap: none
+  default-image-extension: png
+  variables: {}
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Quarto-R (Basic complexity - R1). '
+  page-layout: full
+  
+[33mWARNING (/Users/uqbperma/miniforge3/envs/quarto-jinja-scifr-benchmarking-env/share/quarto/filters/main.lua:9521) Unable to parse table from raw html block: skipping.
+[39mOutput created: temp_quartoR_iter_2.html
+
+SUCCESS: _results_quartoR/quartoR_report_iter2_16K.html (2748644B, real:6.20000s)
+
+Processing 32K dataset with quartoR...
+[31m
+
+processing file: template_quarto.qmd
+[39m1/4                  
+2/4 [unnamed-chunk-1]
+3/4                  
+4/4 [unnamed-chunk-2]
+[31moutput file: template_quarto.knit.md
+
+[39m[1mpandoc -o temp_quartoR_iter_2.html[22m
+  to: html
+  standalone: true
+  embed-resources: true
+  self-contained: true
+  section-divs: true
+  html-math-method: katex
+  wrap: none
+  default-image-extension: png
+  variables: {}
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Quarto-R (Basic complexity - R1). '
+  page-layout: full
+  
+[33mWARNING (/Users/uqbperma/miniforge3/envs/quarto-jinja-scifr-benchmarking-env/share/quarto/filters/main.lua:9521) Unable to parse table from raw html block: skipping.
+[39mOutput created: temp_quartoR_iter_2.html
+
+SUCCESS: _results_quartoR/quartoR_report_iter2_32K.html (3578155B, real:6.89000s)
+
+Processing 64K dataset with quartoR...
+[31m
+
+processing file: template_quarto.qmd
+[39m1/4                  
+2/4 [unnamed-chunk-1]
+3/4                  
+4/4 [unnamed-chunk-2]
+[31moutput file: template_quarto.knit.md
+
+[39m[1mpandoc -o temp_quartoR_iter_2.html[22m
+  to: html
+  standalone: true
+  embed-resources: true
+  self-contained: true
+  section-divs: true
+  html-math-method: katex
+  wrap: none
+  default-image-extension: png
+  variables: {}
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Quarto-R (Basic complexity - R1). '
+  page-layout: full
+  
+[33mWARNING (/Users/uqbperma/miniforge3/envs/quarto-jinja-scifr-benchmarking-env/share/quarto/filters/main.lua:9521) Unable to parse table from raw html block: skipping.
+[39mOutput created: temp_quartoR_iter_2.html
+
+SUCCESS: _results_quartoR/quartoR_report_iter2_64K.html (5236991B, real:8.31000s)
+
+Processing 128K dataset with quartoR...
+[31m
+
+processing file: template_quarto.qmd
+[39m1/4                  
+2/4 [unnamed-chunk-1]
+3/4                  
+4/4 [unnamed-chunk-2]
+[31moutput file: template_quarto.knit.md
+
+[39m[1mpandoc -o temp_quartoR_iter_2.html[22m
+  to: html
+  standalone: true
+  embed-resources: true
+  self-contained: true
+  section-divs: true
+  html-math-method: katex
+  wrap: none
+  default-image-extension: png
+  variables: {}
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Quarto-R (Basic complexity - R1). '
+  page-layout: full
+  
+[33mWARNING (/Users/uqbperma/miniforge3/envs/quarto-jinja-scifr-benchmarking-env/share/quarto/filters/main.lua:9521) Unable to parse table from raw html block: skipping.
+[39mOutput created: temp_quartoR_iter_2.html
+
+SUCCESS: _results_quartoR/quartoR_report_iter2_128K.html (8554689B, real:12.01000s)
+
+Processing 256K dataset with quartoR...
+[31m
+
+processing file: template_quarto.qmd
+[39m1/4                  
+2/4 [unnamed-chunk-1]
+3/4                  
+4/4 [unnamed-chunk-2]
+[31moutput file: template_quarto.knit.md
+
+[39m[1mpandoc -o temp_quartoR_iter_2.html[22m
+  to: html
+  standalone: true
+  embed-resources: true
+  self-contained: true
+  section-divs: true
+  html-math-method: katex
+  wrap: none
+  default-image-extension: png
+  variables: {}
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Quarto-R (Basic complexity - R1). '
+  page-layout: full
+  
+[33mWARNING (/Users/uqbperma/miniforge3/envs/quarto-jinja-scifr-benchmarking-env/share/quarto/filters/main.lua:9521) Unable to parse table from raw html block: skipping.
+[39mOutput created: temp_quartoR_iter_2.html
+
+SUCCESS: _results_quartoR/quartoR_report_iter2_256K.html (15190190B, real:21.42000s)
+
+Processing 485K dataset with quartoR...
+[31m
+
+processing file: template_quarto.qmd
+[39m1/4                  
+2/4 [unnamed-chunk-1]
+3/4                  
+4/4 [unnamed-chunk-2]
+[31moutput file: template_quarto.knit.md
+
+[39m[1mpandoc -o temp_quartoR_iter_2.html[22m
+  to: html
+  standalone: true
+  embed-resources: true
+  self-contained: true
+  section-divs: true
+  html-math-method: katex
+  wrap: none
+  default-image-extension: png
+  variables: {}
+  
+[1mmetadata[22m
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  title: 'Quarto-R (Basic complexity - R1). '
+  page-layout: full
+  
+[33mWARNING (/Users/uqbperma/miniforge3/envs/quarto-jinja-scifr-benchmarking-env/share/quarto/filters/main.lua:9521) Unable to parse table from raw html block: skipping.
+[39mOutput created: temp_quartoR_iter_2.html
+
+SUCCESS: _results_quartoR/quartoR_report_iter2_485K.html (27089856B, real:41.72000s)
+
+quartoR benchmarking iteration 2 completed at Thu  5 Jun 2025 14:30:37 AEST
+Performance data saved to: _results_quartoR/quartoR_runtime_iter2_20250605_142827.csv
+Waiting 10 seconds before next tool...
